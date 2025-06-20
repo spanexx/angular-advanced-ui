@@ -4,14 +4,12 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { DataTableService } from './services/data-table.service';
+import { Observable } from 'rxjs';
 
-
-export interface ColumnDef {
-  key: string;
+export interface ColumnDefinition {
   header: string;
+  field: string;
   sortable?: boolean;
-  filterable?: boolean;
 }
 
 @Component({
@@ -28,12 +26,14 @@ export interface ColumnDef {
   templateUrl: './data-table.component.html',
   styleUrl: './data-table.component.scss'
 })
-export class DataTableComponent <T> implements OnInit {
-  @Input() columns: ColumnDef[] = [];
-  @Input() fetchData!: (page: number, size: number, sort: string, filter: any) => Promise<{ data: T[]; total: number }>;
-  displayedColumns: string[] = this.columns.map(c => c.key);
+export class DataTableComponent<T> implements OnInit {
+  @Input() columnDefinitions: ColumnDefinition[] = [];
+  @Input() fetchDataService!: (page: number, size: number, sort: string, filter: any) => Observable<{ data: T[]; total: number }>;
+  @Input() customFetch?: (page: number, size: number, sort: string, filter: any) => Observable<{ data: T[]; total: number }>;
 
   dataSource = new MatTableDataSource<T>([]);
+  isLoading = false;
+  errorMessage: string | null = null;
   totalItems = 0;
   pageSize = 10;
   pageIndex = 0;
@@ -43,21 +43,30 @@ export class DataTableComponent <T> implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private service: DataTableService<T>) {}
-
   ngOnInit() {
     this.loadPage();
   }
 
-  async loadPage() {
-    const result = await this.fetchData(
+  loadPage() {
+    this.isLoading = true;
+    this.errorMessage = null;
+    (this.customFetch || this.fetchDataService)(
       this.pageIndex,
       this.pageSize,
       this.sortKey,
       this.filterValues
-    );
-    this.dataSource.data = result.data;
-    this.totalItems = result.total;
+    ).subscribe({
+      next: (result) => {
+        this.dataSource.data = result.data;
+        this.totalItems = result.total;
+        this.isLoading = false;
+      },
+      error: (error) => {
+        this.errorMessage = 'Failed to load data.';
+        this.isLoading = false;
+        console.error(error);
+      }
+    });
   }
 
   applyFilter(key: string, value: string) {
@@ -77,5 +86,8 @@ export class DataTableComponent <T> implements OnInit {
     this.pageSize = event.pageSize;
     this.loadPage();
   }
-}
 
+  get displayedColumns(): string[] {
+    return this.columnDefinitions.map(c => c.field);
+  }
+}

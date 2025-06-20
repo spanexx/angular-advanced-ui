@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
-const DataItem = require('../models/dataTable.model');
+const DataItem = require('../models/dataTable.model.js');
 require('dotenv').config();
 
 
 
 async function seedData() {
   // Connection URI (fallback to localhost)
-  const uri = process.env.MONGO_URI || 'mongodb://localhost:27017/yourdb';
-  await mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+  const uri = process.env.MONGO_URI || 'mongodb://localhost:27017/yourdb'; // Replace 'yourdb' with your database name
+  await mongoose.connect(uri);
 
   // Generate sample data
   const items = Array.from({ length: 50 }, (_, i) => ({

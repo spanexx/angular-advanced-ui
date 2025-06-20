@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 require('dotenv').config();
 
 const dataRoutes = require('./routers/dataType.route.js');
@@ -7,12 +8,9 @@ const dataRoutes = require('./routers/dataType.route.js');
 // Initialize Express app
 const app = express();
 app.use(express.json());
+app.use(cors());
 
-
-
-
-
-app.use('/api/data', dataRoutes);
+app.use('/api', dataRoutes);
 
 const PORT = process.env['PORT'] || 3000;
 
