@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { DataTableComponent } from './data-table/data-table.component';
 import { DataQueryResult, DataTableService } from './data-table/services/data-table.service';
 import { Observable } from 'rxjs';
+import { FilterInputComponent } from './filter/filter';
 
 @Component({
   selector: 'app-root',

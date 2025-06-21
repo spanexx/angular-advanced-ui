@@ -1,5 +1,13 @@
 const DataItem = require('../models/dataTable.model');
 
+// Helper: get field types from schema
+const fieldTypes = {
+  name: 'string',
+  value: 'number',
+  category: 'string',
+  createdAt: 'date'
+};
+
 /**
  * GET /api/data
  * Query Params: page, size, sort, filter[key] or filter: { key: value }
@@ -17,15 +25,34 @@ exports.getData = async (req, res, next) => {
     // Support nested filter object (from Angular HttpClient)
     if (req.query.filter && typeof req.query.filter === 'object') {
       Object.entries(req.query.filter).forEach(([key, value]) => {
-        if (value) filterObj[key] = new RegExp(value, 'i');
+        if (value !== undefined && value !== null && value !== '') {
+          if (fieldTypes[key] === 'number') {
+            const num = Number(value);
+            if (!isNaN(num)) filterObj[key] = num;
+          } else if (fieldTypes[key] === 'string') {
+            filterObj[key] = new RegExp(value, 'i');
+          } else {
+            filterObj[key] = value;
+          }
+        }
       });
     }
 
     // Also support flat filter[xxx] keys
     Object.keys(req.query).forEach(key => {
       const match = key.match(/^filter\[(.*)\]$/);
-      if (match && req.query[key]) {
-        filterObj[match[1]] = new RegExp(req.query[key], 'i');
+      if (match && req.query[key] !== undefined && req.query[key] !== null && req.query[key] !== '') {
+        const field = match[1];
+        if (fieldTypes[field] === 'number') {
+          const num = Number(req.query[key]);
+          if (!isNaN(num)) {
+            filterObj[field] = num;
+          }
+        } else if (fieldTypes[field] === 'string') {
+          filterObj[field] = new RegExp(req.query[key], 'i');
+        } else {
+          filterObj[field] = req.query[key];
+        }
       }
     });
 

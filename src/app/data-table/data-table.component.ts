@@ -5,6 +5,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
+import { FilterInputComponent } from '../filter/filter';
 
 export interface ColumnDefinition {
   header: string;
@@ -21,7 +22,8 @@ export interface ColumnDefinition {
     ReactiveFormsModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    FilterInputComponent
   ],
   templateUrl: './data-table.component.html',
   styleUrl: './data-table.component.scss'
@@ -39,11 +41,14 @@ export class DataTableComponent<T> implements OnInit {
   pageIndex = 0;
   sortKey = '';
   filterValues: any = {};
+  pendingFilterValues: any = {};
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   ngOnInit() {
+    // Initialize pendingFilterValues with current filterValues
+    this.pendingFilterValues = { ...this.filterValues };
     this.loadPage();
   }
 
@@ -72,6 +77,16 @@ export class DataTableComponent<T> implements OnInit {
   applyFilter(key: string, value: string) {
     this.filterValues[key] = value;
     console.log('Current filterValues:', this.filterValues); // Debug log
+    this.pageIndex = 0;
+    this.loadPage();
+  }
+
+  onPendingFilterInput(key: string, value: string) {
+    this.pendingFilterValues[key] = value;
+  }
+
+  applyPendingFilters() {
+    this.filterValues = { ...this.pendingFilterValues };
     this.pageIndex = 0;
     this.loadPage();
   }

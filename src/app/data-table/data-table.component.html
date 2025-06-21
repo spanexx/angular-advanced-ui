@@ -1,4 +1,16 @@
 <div class="data-table-container">
+  <!-- Filter Inputs Row -->
+  <div class="filter-row" style="display: flex; gap: 8px; margin-bottom: 8px; align-items: flex-end;">
+    <ng-container *ngFor="let col of columnDefinitions">
+      <app-filter-input
+        [label]="'Filter ' + col.header"
+        [value]="pendingFilterValues[col.field] || ''"
+        (valueChange)="onPendingFilterInput(col.field, $event)">
+      </app-filter-input>
+    </ng-container>
+    <button mat-raised-button color="primary" (click)="applyPendingFilters()">Filter</button>
+  </div>
+
   <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSortChange()">
 
     <!-- Dynamic Columns -->
