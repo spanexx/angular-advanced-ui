@@ -1,33 +1,185 @@
 <div class="data-table-container">
-  <!-- Filter Inputs Row -->
-  <div class="filter-row" style="display: flex; gap: 8px; margin-bottom: 8px; align-items: flex-end;">
-    <ng-container *ngFor="let col of columnDefinitions">
-      <app-filter-input
-        [label]="'Filter ' + col.header"
-        [value]="pendingFilterValues[col.field] || ''"
-        (valueChange)="onPendingFilterInput(col.field, $event)">
-      </app-filter-input>
-    </ng-container>
-    <button mat-raised-button color="primary" (click)="applyPendingFilters()">Filter</button>
+  <!-- Header Section -->
+  <header>
+    <div class="global-search-row" style="margin-bottom: 12px; text-align: right;">
+      <mat-form-field appearance="outline" style="min-width: 220px;">
+        <mat-label>Search all columns</mat-label>
+        <input matInput [(ngModel)]="globalSearch" (ngModelChange)="onGlobalSearchChange($event)"
+          placeholder="Type to search...">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <div class="filter-row" style="display: flex; gap: 8px; margin-bottom: 8px; align-items: flex-end;">
+      <ng-container *ngFor="let col of columnDefinitions">
+        <app-filter-input *ngIf="col.filterable !== false" [label]="'Filter ' + col.header"
+          [filterType]="col.filterType || 'text'" [filterOptions]="col.filterOptions || []"
+          [value]="pendingFilterValues[col.field] || ''" (valueChange)="onPendingFilterInput(col.field, $event)"
+          [minValue]="pendingFilterValues[col.field + '_min']" [maxValue]="pendingFilterValues[col.field + '_max']"
+          (minChange)="onPendingFilterInput(col.field + '_min', $event)"
+          (maxChange)="onPendingFilterInput(col.field + '_max', $event)">
+        </app-filter-input>
+      </ng-container>
+      <button mat-raised-button color="primary" (click)="applyPendingFilters()">
+        <mat-icon>filter_list</mat-icon>
+        Apply Filters
+      </button>
+    </div>
+
+    <!-- Export/Import Section -->
+    <div class="export-import-row" style="display: flex; gap: 8px; margin-bottom: 12px; justify-content: flex-end;">
+      <button mat-stroked-button color="primary" [matMenuTriggerFor]="exportImportMenu">
+        <mat-icon>file_upload</mat-icon> Export / Import
+        <mat-icon>arrow_drop_down</mat-icon>
+      </button>
+      <mat-menu #exportImportMenu="matMenu" class="custom-export-import-menu">
+        <button mat-menu-item (click)="exportTable('csv', false)">
+          <mat-icon>download</mat-icon> Export CSV (View)
+        </button>
+        <button mat-menu-item (click)="exportTable('xlsx', false)">
+          <mat-icon>download</mat-icon> Export Excel (View)
+        </button>
+        <button mat-menu-item (click)="exportTable('csv', true)">
+          <mat-icon>download</mat-icon> Export CSV (All)
+        </button>
+        <button mat-menu-item (click)="exportTable('xlsx', true)">
+          <mat-icon>download</mat-icon> Export Excel (All)
+        </button>
+        <button mat-menu-item (click)="exportSelectedRows()" [disabled]="selectedRows.length === 0">
+          <mat-icon>download</mat-icon> Export Selected
+        </button>
+        <button mat-menu-item (click)="deleteSelectedRows()" [disabled]="selectedRows.length === 0">
+          <mat-icon>delete</mat-icon> Delete Selected
+        </button>
+        <button mat-menu-item (click)="fileInput.click()">
+          <mat-icon>upload</mat-icon> Import CSV/Excel
+        </button>
+      </mat-menu>
+      <input #fileInput type="file" accept=".csv,.xlsx" style="display:none" (change)="importTable($event)">
+    </div>
+  </header>
+
+  <!-- Table Content Section -->
+  <main>
+    <!-- States -->
+    <div *ngIf="isLoading" class="loading-indicator" style="text-align:center; margin: 24px 0;">
+      <mat-spinner diameter="40"></mat-spinner>
+      <div>Loading data...</div>
+    </div>
+
+    <div *ngIf="!isLoading && errorMessage" class="error-message"
+      style="color: red; text-align: center; margin: 24px 0;">
+      <mat-icon>error_outline</mat-icon>
+      <span>{{ errorMessage }}</span>
+    </div>
+
+    <div *ngIf="!isLoading && !errorMessage && dataSource.data.length === 0" class="no-data-message"
+      style="text-align: center; margin: 24px 0; color: #888;">
+      <mat-icon>inbox</mat-icon>
+      <p>No data available</p>
+    </div>
+
+    <!-- Data Table -->
+    <div class="table-responsive-wrapper" tabindex="0" aria-label="Data Table Wrapper" style="overflow-x:auto;">
+      <cdk-virtual-scroll-viewport itemSize="48" class="virtual-scroll-viewport" style="height: 500px; min-width: 100%;">
+        <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSortChange()"
+          *ngIf="!isLoading && !errorMessage && dataSource.data.length > 0"
+          role="table" aria-label="Data Table">
+          <!-- Selection Column -->
+          <ng-container *ngIf="selectionMode !== 'none'" matColumnDef="select">
+            <th mat-header-cell *matHeaderCellDef role="columnheader">
+              <mat-checkbox *ngIf="selectionMode === 'multiple'" [checked]="isAllRowsSelected()"
+                (change)="toggleSelectAllRows()" aria-label="Select all rows">
+              </mat-checkbox>
+            </th>
+            <td mat-cell *matCellDef="let row" role="cell">
+              <mat-checkbox [checked]="isRowSelected(row)" (change)="toggleRowSelection(row)" aria-label="Select row">
+              </mat-checkbox>
+            </td>
+          </ng-container>
+
+          <!-- Dynamic Data Columns -->
+          <ng-container *ngFor="let col of columnDefinitions" [matColumnDef]="col.field">
+            <th mat-header-cell *matHeaderCellDef [mat-sort-header]="col.sortable ? col.field : ''"
+              (click)="onSortChange(null, col.field, $event)" [class.sortable]="col.sortable"
+              [attr.aria-sort]="getSortDirection(col.field)" role="columnheader" tabindex="0">
+              {{ col.header }}
+              <ng-container *ngIf="col.sortable && getSortDirection(col.field)">
+                <mat-icon>{{ getSortDirection(col.field) === 'asc' ? 'arrow_upward' : 'arrow_downward' }}</mat-icon>
+                <span class="sort-order">{{ getSortOrder(col.field) }}</span>
+              </ng-container>
+            </th>
+            <td mat-cell *matCellDef="let row; let i = index"
+              [ngClass]="col.cellClass ? col.cellClass(row[col.field], row) : null"
+              [ngStyle]="col.cellStyle ? col.cellStyle(row[col.field], row) : null" role="cell" tabindex="0">
+              <ng-container *ngIf="editedRow && editedRow[rowIdField] === row[rowIdField]; else displayCell">
+                <mat-form-field appearance="outline" style="width:100%;margin:0;">
+                  <input matInput [(ngModel)]="editedRow[col.field]" />
+                </mat-form-field>
+              </ng-container>
+              <ng-template #displayCell>
+                <ng-container *ngIf="col.cellTemplate; else defaultCell">
+                  <ng-container
+                    *ngTemplateOutlet="col.cellTemplate; context: { $implicit: row[col.field], row: row, col: col }"></ng-container>
+                </ng-container>
+                <ng-template #defaultCell>
+                  {{ row[col.field] }}
+                </ng-template>
+              </ng-template>
+            </td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container *ngIf="rowActions?.length || true" matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef role="columnheader">Actions</th>
+            <td mat-cell *matCellDef="let row" role="cell">
+              <ng-container *ngIf="editedRow && editedRow[rowIdField] === row[rowIdField]; else actionButtons">
+                <button mat-icon-button color="primary" (click)="saveEditRow(row)"
+                  aria-label="Save row"><mat-icon>check</mat-icon></button>
+                <button mat-icon-button color="warn" (click)="cancelEditRow()"
+                  aria-label="Cancel edit"><mat-icon>close</mat-icon></button>
+              </ng-container>
+              <ng-template #actionButtons>
+                <button mat-icon-button color="accent" (click)="editRow(row)"
+                  aria-label="Edit row"><mat-icon>edit</mat-icon></button>
+                <button mat-icon-button color="warn" (click)="deleteRow(row)"
+                  aria-label="Delete row"><mat-icon>delete</mat-icon></button>
+                <button *ngFor="let action of rowActions" mat-icon-button [color]="action.color || 'primary'"
+                  (click)="onRowAction(action.action, row)" [matTooltip]="action.label" [attr.aria-label]="action.label">
+                  <mat-icon>{{ action.icon }}</mat-icon>
+                </button>
+              </ng-template>
+            </td>
+          </ng-container>
+
+          <!-- Table Structure -->
+          <tr mat-header-row *matHeaderRowDef="displayedColumns" role="row"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns" role="row" tabindex="0"></tr>
+        </table>
+      </cdk-virtual-scroll-viewport>
+    </div>
+
+    <!-- Pagination -->
+    <mat-paginator [length]="totalItems" [pageSize]="pageSize" [pageIndex]="pageIndex" (page)="onPageChange($event)"
+      aria-label="Table Pagination">
+    </mat-paginator>
+  </main>
+
+  <!-- Bulk Actions -->
+  <div *ngIf="selectionMode !== 'none' && selectedRows.length > 0" class="bulk-actions-toolbar-fixed" role="toolbar"
+    aria-label="Bulk actions">
+    <div class="bulk-actions-toolbar-inner">
+      <span>{{ selectedRows.length }} items selected</span>
+      <button mat-stroked-button color="warn" (click)="deleteSelectedRows()">
+        <mat-icon>delete</mat-icon>
+        Delete Selected
+      </button>
+      <button *ngFor="let action of rowActions" mat-stroked-button color="primary"
+        (click)="onBulkAction(action.action)">
+        <mat-icon>{{ action.icon }}</mat-icon>
+        {{ action.label }}
+      </button>
+    </div>
   </div>
-
-  <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSortChange()">
-
-    <!-- Dynamic Columns -->
-    <ng-container *ngFor="let col of columnDefinitions" [matColumnDef]="col.field">
-      <th mat-header-cell *matHeaderCellDef [mat-sort-header]="col.sortable ? col.field : ''">{{ col.header }}</th>
-      <td mat-cell *matCellDef="let row">{{ row[col.field] }}</td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-
-  </table>
-
-  <mat-paginator
-    [length]="totalItems"
-    [pageSize]="pageSize"
-    [pageIndex]="pageIndex"
-    (page)="onPageChange($event)">
-  </mat-paginator>
+  
 </div>

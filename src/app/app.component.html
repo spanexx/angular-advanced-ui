@@ -1,4 +1,12 @@
+<ng-template #categoryChip let-value let-row="row">
+  <span [ngStyle]="{ 'background': value === 'Alpha' ? '#e3f2fd' : value === 'Beta' ? '#e8f5e9' : '#fff3e0', 'color': value === 'Alpha' ? '#1976d2' : value === 'Beta' ? '#388e3c' : '#f57c00', 'padding': '2px 10px', 'border-radius': '12px', 'font-weight': 'bold', 'font-size': '13px' }">
+    {{ value }}
+  </span>
+</ng-template>  
+
 <app-data-table
   [columnDefinitions]="columns"
-  [fetchDataService]="fetchData">
+  [fetchDataService]="fetchData"
+  [selectionMode]="'multiple'"
+  [rowIdField]="'name'">
 </app-data-table>

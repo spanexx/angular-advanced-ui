@@ -1,1 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Make mat-spinner stand out in data table */
+.mat-spinner, .mat-progress-spinner {
+  stroke: #1976d2 !important; /* Use Material blue for visibility */
+  background: transparent !important;
+}
+
+.data-table-container .mat-spinner circle, 
+.data-table-container .mat-progress-spinner circle {
+  stroke: #1976d2 !important; /* Material blue */
+}

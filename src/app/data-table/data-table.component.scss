@@ -1,9 +1,275 @@
 .data-table-container {
   width: 100%;
   overflow: auto;
+  padding: 16px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+  .global-search-row {
+    margin-bottom: 16px;
+    text-align: right;
+
+    mat-form-field {
+      min-width: 280px;
+      @media (max-width: 600px) {
+        width: 100%;
+      }
+    }
+  }
+
+  .filter-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+
+    app-filter-input {
+      flex: 1;
+      min-width: 200px;
+      @media (max-width: 600px) {
+        width: 100%;
+        flex: none;
+      }
+    }
+
+    button {
+      height: 56px;
+      min-width: 100px;
+    }
+  }
+
+  .loading-indicator {
+    text-align: center;
+    padding: 32px 0;
+
+    mat-spinner {
+      margin: 0 auto;
+    }
+
+    div {
+      margin-top: 12px;
+      color: rgba(0, 0, 0, 0.54);
+    }
+  }
+
+  .error-message {
+    padding: 16px;
+    color: #f44336;
+    text-align: center;
+    background: #ffebee;
+    border-radius: 4px;
+    margin: 16px 0;
+  }
+
+  .no-data-message {
+    padding: 32px;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.54);
+    background: #fafafa;
+    border-radius: 4px;
+  }
+
+  .bulk-actions-toolbar-fixed {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #f5f5f5;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+
+    .bulk-actions-toolbar-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+
+      span {
+        font-weight: 500;
+        color: rgba(0, 0, 0, 0.87);
+      }
+
+      button {
+        mat-icon {
+          margin-right: 8px;
+        }
+      }
+    }
+  }
 
   table {
     width: 100%;
-    margin-bottom: 1rem;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-bottom: 16px;
+
+    th {
+      background: #fafafa;
+      color: rgba(0, 0, 0, 0.87);
+      font-weight: 500;
+      white-space: nowrap;
+
+      &.sortable {
+        &:hover {
+          background: #f5f5f5;
+        }
+
+        .sort-order {
+          opacity: 0.7;
+          margin-left: 4px;
+        }
+      }
+    }
+
+    td {
+      color: rgba(0, 0, 0, 0.87);
+    }
+
+    tr {
+      &:hover {
+        background-color: #f5f5f5;
+      }
+    }
+
+    td,
+    th {
+      padding: 12px 16px !important;
+      font-size: 14px;
+      border-bottom: 1px solid #eeeeee;
+    }
+  }
+
+  mat-paginator {
+    border-top: 1px solid #eeeeee;
+  }
+
+  @media (max-width: 900px) {
+    padding: 8px;
+    box-shadow: none;
+    border-radius: 0;
+
+    .global-search-row {
+      mat-form-field {
+        min-width: 100px;
+        width: 100%;
+      }
+    }
+
+    .filter-row {
+      flex-direction: column;
+      gap: 8px;
+
+      app-filter-input {
+        width: 100%;
+        min-width: 0;
+      }
+
+      button {
+        width: 100%;
+        margin-top: 4px;
+      }
+    }
+
+    table {
+      font-size: 13px;
+
+      th,
+      td {
+        padding: 8px 6px !important;
+      }
+    }
+  }
+
+  @media (max-width: 600px) {
+    padding: 2px;
+
+    .bulk-actions-toolbar-fixed {
+      .bulk-actions-toolbar-inner {
+        flex-direction: column;
+        gap: 8px;
+        padding: 8px 4px;
+
+        span {
+          margin-bottom: 4px;
+        }
+      }
+    }
+
+    table {
+      display: block;
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+
+      th,
+      td {
+        white-space: nowrap;
+        min-width: 80px;
+      }
+    }
+
+    mat-paginator {
+      .mat-paginator-range-label {
+        font-size: 12px;
+      }
+    }
+  }
+
+  /**
+   * Custom styles for the export/import dropdown menu
+   */
+  ::ng-deep .mat-menu-panel.export-import-menu {
+    background: #fff !important;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18),
+      0 1.5px 6px rgba(0, 0, 0, 0.12);
+    z-index: 1200 !important;
+    min-width: 220px;
+    margin-top: 8px !important;
+    border-radius: 8px;
+    padding: 4px 0;
+  }
+
+  ::ng-deep .mat-menu-panel.export-import-menu .mat-menu-item {
+    font-size: 15px;
+    padding: 10px 20px;
+    gap: 12px;
+  }
+
+  ::ng-deep .mat-menu-panel.export-import-menu .mat-icon {
+    color: #1976d2;
+    margin-right: 8px;
+  }
+
+  ::ng-deep .custom-export-import-menu .mat-menu-content {
+    background: #23272f;
+    color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25),
+      0 1.5px 4px rgba(0, 0, 0, 0.18);
+    z-index: 1200 !important;
+    min-width: 220px;
+    padding: 8px 0;
+  }
+
+  ::ng-deep .custom-export-import-menu .mat-menu-item {
+    color: #fff;
+    font-weight: 500;
+    border-radius: 4px;
+    margin: 2px 8px;
+    transition: background 0.2s;
+  }
+
+  ::ng-deep .custom-export-import-menu .mat-menu-item:hover {
+    background: #3a4252;
+    color: #ffd600;
+  }
+
+  // Ensure menu overlays above other UI
+  ::ng-deep .cdk-overlay-pane .custom-export-import-menu {
+    z-index: 1200 !important;
   }
 }

@@ -1,4 +1,5 @@
 const DataItem = require('../models/dataTable.model');
+const XLSX = require('xlsx');
 
 // Helper: get field types from schema
 const fieldTypes = {
@@ -73,5 +74,35 @@ exports.getData = async (req, res, next) => {
     });
   } catch (error) {
     next(error);
+  }
+};
+
+/**
+ * POST /api/data/import
+ * Accepts a CSV or Excel file and saves data to the database
+ */
+exports.importData = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+    // Parse file buffer using XLSX
+    const workbook = XLSX.read(req.file.buffer, { type: 'buffer' });
+    const sheetName = workbook.SheetNames[0];
+    const worksheet = workbook.Sheets[sheetName];
+    let json = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
+    if (!Array.isArray(json) || json.length === 0) {
+      return res.status(400).json({ error: 'No data found in file' });
+    }
+    // Remove _id fields to avoid duplicate key errors
+    json = json.map(row => {
+      const { _id, ...rest } = row;
+      return rest;
+    });
+    await DataItem.insertMany(json);
+    res.json({ success: true, count: json.length });
+  } catch (err) {
+    console.error('Import error:', err);
+    res.status(500).json({ error: 'Failed to import data' });
   }
 };
