@@ -1,27 +1,155 @@
-# AngularAdvancedUi
+# 🧱 Angular Advanced UI Components (Showcase)
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.12.
+This project is an end-to-end implementation of a reusable, configurable **Advanced Data Table component** in Angular, connected to a real backend API using Node.js, Express, and MongoDB.
 
-## Development server
+## 🔧 Features
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+### Angular Frontend
 
-## Code scaffolding
+* ✅ Standalone Angular component (`standalone: true`)
+* ✅ Pagination, sorting, filtering (client and server-side)
+* ✅ Material design (Angular Material)
+* ✅ Configurable columns and filter behavior
+* ✅ Observable-based data service
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Express Backend
 
-## Build
+* ✅ MongoDB with Mongoose schema for `DataItem`
+* ✅ API: `/api/data?page=0&size=10&sort=name,asc&filter[category]=Alpha`
+* ✅ Regex-based filtering, pagination, and sorting
+* ✅ Easy-to-extend architecture
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+---
 
-## Running unit tests
+## 📁 Project Structure
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### 🧩 Component Modules (Current & Upcoming)
 
-## Running end-to-end tests
+| Component             | Status         | Description                                         |
+| --------------------- | -------------- | --------------------------------------------------- |
+| `advanced-data-table` | ✅ In Progress    | Paginated, sortable, filterable data table          |
+| `dynamic-form`        | 🚧 Coming Soon | Schema-driven reactive forms                        |
+| `stepper-wizard`      | 🚧 Coming Soon | Step-based UI wizard with validation                |
+| `modal-service`       | 🚧 Coming Soon | Centralized modal service with injectable config    |
+| `smart-search-bar`    | 🚧 Coming Soon | Intelligent search input with debounce/autocomplete |
+| `infinite-scroll`     | 🚧 Coming Soon | Lazy-loaded infinite scroll directive/component     |
+| `file-upload-zone`    | 🚧 Coming Soon | Drag-and-drop file upload with preview              |
+| `notification-system` | 🚧 Coming Soon | Toast/snackbar system with global injection         |
+| `editable-grid`       | 🚧 Coming Soon | Grid/table with inline editing                      |
+| `filter-builder`      | 🚧 Coming Soon | Visual query builder for dynamic filtering          |
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+```
+angular-advanced-ui/
+├── apps/
+│   └── demo-app/                 # Showcases all components
+├── projects/
+│   ├── advanced-data-table/     # ✅ In Progress
+│   ├── dynamic-form/            # 🚧 Coming Soon
+│   ├── stepper-wizard/          # 🚧 Coming Soon
+│   ├── modal-service/           # 🚧 Coming Soon
+│   ├── smart-search-bar/        # 🚧 Coming Soon
+│   ├── infinite-scroll/         # 🚧 Coming Soon
+│   ├── file-upload-zone/        # 🚧 Coming Soon
+│   ├── notification-system/     # 🚧 Coming Soon
+│   ├── editable-grid/           # 🚧 Coming Soon
+│   └── filter-builder/          # 🚧 Coming Soon
+├── backend/
+│   ├── controllers/
+│   ├── models/
+│   ├── routes/
+│   ├── seeds/
+│   └── app.js
+├── README.md
+└── package.json
+```
 
-## Further help
+---
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+## 🚀 Getting Started
+
+### 1. Frontend (Angular)
+
+```bash
+npm install
+npm start
+```
+
+Navigate to `http://localhost:4200` to explore the demo app.
+
+### 2. Backend (Node.js + MongoDB)
+
+```bash
+cd backend
+npm install
+node app.js
+```
+
+Environment variable: `MONGO_URI` (default: `mongodb://localhost:27017/yourdb`)
+
+### 3. Seed Data
+
+```bash
+cd backend
+node seeds/dataSeeder.js
+```
+
+---
+
+## 🧪 API Example
+
+```http
+GET /api/data?page=1&size=20&sort=name,asc&filter[category]=Beta
+```
+
+Response:
+
+```json
+{
+  "data": [ { "name": "Item 1", ... }, ... ],
+  "total": 50
+}
+```
+
+---
+
+## 📦 Technologies
+
+* Angular 17 (standalone components)
+* Angular Material & CDK
+* RxJS & Observables
+* Node.js, Express
+* MongoDB, Mongoose
+* SCSS & TailwindCSS ready
+
+---
+
+## 🛠️ Developer Notes
+
+* The frontend `DataTableService` uses `HttpClient` with observable streams.
+* Filtering uses `filter[key]=value` format.
+* Backend uses RegExp search (`/value/i`) for flexible filtering.
+* Data is paginated and sorted on the server.
+
+---
+
+## 📚 Next Improvements
+
+* 🔍 Add global search bar
+* ✍️ Add row editing
+* 🧩 Add export to CSV / Excel
+* 🌐 Internationalization (i18n)
+* 🔐 Add authentication
+
+---
+
+## 🤝 Contribution
+
+1. Fork this repo
+2. Create a feature branch
+3. Submit a pull request
+
+---
+
+## 📄 License
+
+spanexx © Victor Chidera Ani
