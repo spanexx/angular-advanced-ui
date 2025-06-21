@@ -71,6 +71,7 @@ export class DataTableComponent<T> implements OnInit {
 
   applyFilter(key: string, value: string) {
     this.filterValues[key] = value;
+    console.log('Current filterValues:', this.filterValues); // Debug log
     this.pageIndex = 0;
     this.loadPage();
   }
