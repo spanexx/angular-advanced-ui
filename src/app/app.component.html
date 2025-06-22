@@ -1,3 +1,4 @@
+<ng-container *ngIf="columns">
 <ng-template #categoryChip let-value let-row="row">
   <span [ngStyle]="{ 'background': value === 'Alpha' ? '#e3f2fd' : value === 'Beta' ? '#e8f5e9' : '#fff3e0', 'color': value === 'Alpha' ? '#1976d2' : value === 'Beta' ? '#388e3c' : '#f57c00', 'padding': '2px 10px', 'border-radius': '12px', 'font-weight': 'bold', 'font-size': '13px' }">
     {{ value }}
@@ -10,3 +11,16 @@
   [selectionMode]="'multiple'"
   [rowIdField]="'name'">
 </app-data-table>
+
+</ng-container>
+
+<ng-container *ngIf="schema">
+<h2 >🧠 Dynamic Form Demo</h2>
+    <lib-dynamic-form
+      [schema]="schema"
+      [loading]="isSubmitting"
+      [preSubmit]="preSubmit"
+      [postSubmit]="postSubmit"
+      (submitForm)="handleSubmit($event)"
+    ></lib-dynamic-form>
+</ng-container>

@@ -1,0 +1,73 @@
+.dynamic-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+
+  .form-fields {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+
+  .full-width {
+    flex: 1 1 220px;
+    min-width: 180px;
+    max-width: 100%;
+  }
+
+  .checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    min-width: 180px;
+    margin-top: 0.5rem;
+  }
+
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+  }
+  .options{
+    z-index: 2000;
+  }
+
+  .submit-btn {
+    min-width: 120px;
+    font-size: 1rem;
+  }
+}
+
+// Responsive styles
+@media (max-width: 700px) {
+  .dynamic-form {
+    max-width: 100%;
+    padding: 1rem 0.5rem;
+
+    .form-fields {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .form-actions {
+      justify-content: center;
+    }
+  }
+}
+
+@media (max-width: 400px) {
+  .dynamic-form {
+    padding: 0.5rem 0.2rem;
+
+    .submit-btn {
+      width: 100%;
+      min-width: unset;
+    }
+  }
+}

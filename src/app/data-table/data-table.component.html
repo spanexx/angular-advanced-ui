@@ -70,7 +70,17 @@
     <div *ngIf="!isLoading && errorMessage" class="error-message"
       style="color: red; text-align: center; margin: 24px 0;">
       <mat-icon>error_outline</mat-icon>
-      <span>{{ errorMessage }}</span>
+      <span *ngIf="errorMessage.includes('Cannot connect to the server')">
+        <b>Server Unavailable:</b> Cannot connect to the server. Please check your network connection or try again later.
+      </span>
+      <span *ngIf="!errorMessage.includes('Cannot connect to the server')">
+        {{ errorMessage }}
+      </span>
+      <div style="margin-top: 12px;">
+        <button mat-stroked-button color="primary" (click)="loadPage()">
+          <mat-icon>refresh</mat-icon> Retry
+        </button>
+      </div>
     </div>
 
     <div *ngIf="!isLoading && !errorMessage && dataSource.data.length === 0" class="no-data-message"

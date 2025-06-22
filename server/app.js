@@ -4,6 +4,8 @@ const cors = require('cors');
 require('dotenv').config();
 
 const dataRoutes = require('./routers/dataType.route.js');
+const dynamicFormRoutes = require('./routers/dynamicForm.route.js');
+
 
 // Initialize Express app
 const app = express();
@@ -11,6 +13,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use('/api', dataRoutes);
+app.use('/api', dynamicFormRoutes);
 
 const PORT = process.env['PORT'] || 3000;
 

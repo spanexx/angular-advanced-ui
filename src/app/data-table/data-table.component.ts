@@ -129,7 +129,11 @@ export class DataTableComponent<T extends Record<string, any>> implements OnInit
         this.isLoading = false;
       },
       error: (error) => {
-        this.errorMessage = 'Failed to load data.';
+        if (error.status === 0 || error.message?.includes('Network') || error.message?.includes('Http failure')) {
+          this.errorMessage = 'Cannot connect to the server. Please check your network connection or try again later.';
+        } else {
+          this.errorMessage = 'Failed to load data.';
+        }
         this.isLoading = false;
         console.error(error);
       }
