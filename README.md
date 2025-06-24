@@ -26,26 +26,26 @@ This project is an end-to-end implementation of a reusable, configurable **Advan
 ### 🧩 Component Modules (Current & Upcoming)
 
 | Component             | Status         | Description                                         |
-| --------------------- | -------------- | --------------------------------------------------- |
-| `advanced-data-table` | ✅ In Progress    | Paginated, sortable, filterable data table          |
-| `dynamic-form`        | ✅ In Progress  | Schema-driven reactive forms                        |
-| `stepper-wizard`      | 🚧 Coming Soon | Step-based UI wizard with validation                |
+| --------------------  | -------------  | --------------------------------------------------- |
+| `advanced-data-table` | ✅ In Progress | Paginated, sortable, filterable data table          |
+| `dynamic-form`        | ✅ In Progress |  Schema-driven reactive forms                       |
+| `stepper-wizard`      | ✅ In Progress |  UI wizard with validation                          |
 | `modal-service`       | 🚧 Coming Soon | Centralized modal service with injectable config    |
 | `smart-search-bar`    | 🚧 Coming Soon | Intelligent search input with debounce/autocomplete |
 | `infinite-scroll`     | 🚧 Coming Soon | Lazy-loaded infinite scroll directive/component     |
 | `file-upload-zone`    | 🚧 Coming Soon | Drag-and-drop file upload with preview              |
-| `notification-system` | 🚧 Coming Soon | Toast/snackbar system with global injection         |
+| `notification-system` | ✅ In Progress | Toast/snackbar system with global injection         |
 | `editable-grid`       | 🚧 Coming Soon | Grid/table with inline editing                      |
 | `filter-builder`      | 🚧 Coming Soon | Visual query builder for dynamic filtering          |
 
-```
+```tree
 angular-advanced-ui/
 ├── apps/
 │   └── demo-app/                 # Showcases all components
 ├── projects/
 │   ├── advanced-data-table/     # ✅ In Progress
-│   ├── dynamic-form/            # 🚧 Coming Soon
-│   ├── stepper-wizard/          # 🚧 Coming Soon
+│   ├── dynamic-form/            # ✅ In Progress
+│   ├── stepper-wizard/          # ✅ In Progress
 │   ├── modal-service/           # 🚧 Coming Soon
 │   ├── smart-search-bar/        # 🚧 Coming Soon
 │   ├── infinite-scroll/         # 🚧 Coming Soon
