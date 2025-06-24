@@ -1,0 +1,30 @@
+<mat-horizontal-stepper #stepper [linear]="linear">
+  <mat-step [label]="steps[0] ? steps[0].label : ''" [completed]="steps[0] && steps[0].completed" [hasError]="steps[0] && steps[0].hasError">
+    <ng-content select="[step-content-0]"></ng-content>
+    <div *ngIf="stepErrors[0]" class="form-error">{{ stepErrors[0] }}</div>
+    <div *ngIf="stepForms[0] && stepForms[0].invalid && (stepForms[0].touched || stepForms[0].dirty) && !stepErrors[0]" class="form-error">
+    </div>
+    <div class="step-controls">
+      <button *ngIf="stepForms[0]" mat-button color="primary" (click)="stepForms[0].markAllAsTouched(); next()">Next</button>
+    </div>
+  </mat-step>
+  <mat-step [label]="steps[1] ? steps[1].label : ''" [completed]="steps[1] && steps[1].completed" [hasError]="steps[1] && steps[1].hasError">
+    <ng-content select="[step-content-1]"></ng-content>
+    <div *ngIf="stepErrors[1]" class="form-error">{{ stepErrors[1] }}</div>
+    <div class="step-controls">
+      <button mat-button (click)="back()">Back</button>
+      <button *ngIf="stepForms[1]" mat-button color="primary" (click)="next()">Next</button>
+    </div>
+  </mat-step>
+  <mat-step [label]="steps[2] ? steps[2].label : ''" [completed]="steps[2] && steps[2].completed" [hasError]="steps[2] && steps[2].hasError">
+    <ng-content select="[step-content-2]"></ng-content>
+    <div *ngIf="stepErrors[2]" class="form-error">{{ stepErrors[2] }}</div>
+    <div *ngIf="crossStepError" class="form-error">{{ crossStepError }}</div>
+    <div class="step-controls">
+      <button mat-button (click)="back()">Back</button>
+      <button mat-raised-button color="accent" (click)="submit()" [disabled]="loading">
+        {{ loading ? 'Submitting...' : 'Finish' }}
+      </button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>

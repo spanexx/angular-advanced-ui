@@ -28,7 +28,7 @@ This project is an end-to-end implementation of a reusable, configurable **Advan
 | Component             | Status         | Description                                         |
 | --------------------- | -------------- | --------------------------------------------------- |
 | `advanced-data-table` | ✅ In Progress    | Paginated, sortable, filterable data table          |
-| `dynamic-form`        | 🚧 Coming Soon | Schema-driven reactive forms                        |
+| `dynamic-form`        | ✅ In Progress  | Schema-driven reactive forms                        |
 | `stepper-wizard`      | 🚧 Coming Soon | Step-based UI wizard with validation                |
 | `modal-service`       | 🚧 Coming Soon | Centralized modal service with injectable config    |
 | `smart-search-bar`    | 🚧 Coming Soon | Intelligent search input with debounce/autocomplete |

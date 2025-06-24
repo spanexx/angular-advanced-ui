@@ -1,26 +1,10 @@
-<ng-container *ngIf="columns">
-<ng-template #categoryChip let-value let-row="row">
-  <span [ngStyle]="{ 'background': value === 'Alpha' ? '#e3f2fd' : value === 'Beta' ? '#e8f5e9' : '#fff3e0', 'color': value === 'Alpha' ? '#1976d2' : value === 'Beta' ? '#388e3c' : '#f57c00', 'padding': '2px 10px', 'border-radius': '12px', 'font-weight': 'bold', 'font-size': '13px' }">
-    {{ value }}
-  </span>
-</ng-template>  
-
-<app-data-table
-  [columnDefinitions]="columns"
-  [fetchDataService]="fetchData"
-  [selectionMode]="'multiple'"
-  [rowIdField]="'name'">
-</app-data-table>
-
-</ng-container>
-
-<ng-container *ngIf="schema">
-<h2 >🧠 Dynamic Form Demo</h2>
-    <lib-dynamic-form
-      [schema]="schema"
-      [loading]="isSubmitting"
-      [preSubmit]="preSubmit"
-      [postSubmit]="postSubmit"
-      (submitForm)="handleSubmit($event)"
-    ></lib-dynamic-form>
-</ng-container>
+<header class="app-header">
+  <nav>
+    <a routerLink="/data-table" routerLinkActive="active">Data Table Demo</a>
+    <a routerLink="/dynamic-form" routerLinkActive="active">Dynamic Form Demo</a>
+    <a routerLink="/stepper-wizard" routerLinkActive="active">Stepper Wizard Demo</a>
+    <a routerLink="/sign-pad" routerLinkActive="active">Sign Pad</a>
+    <a routerLink="/toast-demo" routerLinkActive="active">Toast Demo</a>
+  </nav>
+</header>
+<router-outlet></router-outlet>

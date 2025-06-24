@@ -1,0 +1,27 @@
+.step-controls {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.step-controls button {
+  padding: 10px 20px;
+  font-size: 16px;
+}
+.step-controls button[disabled] {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+.step-controls button.primary {
+  background-color: #007bff;
+  color: white;
+}
+.step-controls button.secondary {
+  background-color: #6c757d;
+  color: white;
+}
+.stepper-wizard {
+  width: 100%;
+  max-width: 600px;
+  margin: auto;
+}

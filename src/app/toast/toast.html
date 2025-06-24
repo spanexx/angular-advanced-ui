@@ -1,0 +1,17 @@
+<div class="toast-wrapper" [ngClass]="position" role="region" aria-live="polite" aria-atomic="true">
+  <div
+    *ngFor="let toast of toasts"
+    class="toast"
+    [ngClass]="[toast.type, toast.cssClass]"
+    [ngStyle]="toast.style"
+    tabindex="0"
+    role="alert"
+    [attr.aria-label]="toast.type + ' notification: ' + toast.message"
+  >the 
+    <span *ngIf="toast.icon" class="toast-icon" [innerHTML]="safeIcons[toast.id]"></span>
+    <span class="message">{{ toast.message }}</span>
+    <div *ngIf="toast.progressBar" class="progress-bar"></div>
+    <button *ngIf="toast.action" (click)="onActionClick(toast)">{{toast.action.label}}</button>
+    <button (click)="dismiss(toast.id)" aria-label="Dismiss notification">×</button>
+  </div>
+</div>

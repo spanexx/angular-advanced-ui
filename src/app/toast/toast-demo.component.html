@@ -1,0 +1,31 @@
+<div class="container">
+  <h1>Toast Demo</h1>
+
+  <button class="btn btn-success" (click)="showSuccess()">Show Success</button>
+  <button class="btn btn-danger" (click)="showError()">Show Error</button>
+  <button class="btn btn-info" (click)="showInfo()">Show Info</button>
+  <button class="btn btn-primary" (click)="simulateAsyncOperation()">Simulate Async</button>
+  <button class="btn btn-primary" (click)="showCustomStyledToast()">Show Custom Styled Toast</button>
+  <button class="btn btn-warning" (click)="showActionToast()">Show Action Toast</button>
+  <button class="btn btn-danger" (click)="showRetryToast()">Show Retry Toast</button>
+  <button class="btn btn-danger" (click)="simulateDeleteUser()">Simulate Delete User</button>
+
+  <label for="position">Position:</label>
+  <select id="position" [(ngModel)]="position">
+    <option value="top-left">Top Left</option>
+    <option value="top-right">Top Right</option>
+    <option value="bottom-left">Bottom Left</option>
+    <option value="bottom-right">Bottom Right</option>
+  </select>
+
+  <app-toast-container [toasts]="toasts" [position]="position"></app-toast-container>
+  <button class="btn btn-primary" (click)="clearToasts()">Clear Toasts</button>
+
+  <div class="user-card" *ngIf="user">
+    <h3>{{ user.name }}</h3>
+    <p>{{ user.email }}</p>
+    <button class="btn btn-danger" (click)="deleteUser()" *ngIf="!user.deleted">Delete User</button>
+    <button class="btn btn-success" (click)="restoreUser()" *ngIf="user.deleted">Restore User</button>
+    <span *ngIf="user.deleted" class="deleted-label">Deleted</span>
+  </div>
+</div>
