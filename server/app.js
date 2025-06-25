@@ -5,6 +5,8 @@ require('dotenv').config();
 
 const dataRoutes = require('./routers/dataType.route.js');
 const dynamicFormRoutes = require('./routers/dynamicForm.route.js');
+const chatRoutes = require('./routers/chat.route.js');
+const uploadRoutes = require('./routers/upload.route.js');
 
 
 // Initialize Express app
@@ -14,6 +16,8 @@ app.use(cors());
 
 app.use('/api', dataRoutes);
 app.use('/api', dynamicFormRoutes);
+app.use('/api/chat', chatRoutes);
+app.use('/api/chat/upload', uploadRoutes);
 
 const PORT = process.env['PORT'] || 3000;
 

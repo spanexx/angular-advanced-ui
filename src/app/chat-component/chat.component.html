@@ -1,0 +1,67 @@
+<div class="chat-container">
+  <div *ngIf="(pinnedMessages$ | async)?.length" class="pinned-message">
+    <span class="pin-icon">📌</span>
+    <span *ngFor="let msg of pinnedMessages$ | async">
+      <span>{{ msg.text }}</span>
+      <button (click)="unpinMessage(msg)" title="Unpin">Unpin</button>
+    </span>
+  </div>
+  <div class="messages">
+    <ng-container *ngFor="let group of groupedMessages$ | async">
+      <div class="group-header">{{ group.date | date:'fullDate' }}</div>
+      <div *ngFor="let msg of group.msgs" class="message">
+        <img *ngIf="msg.avatarUrl" [src]="msg.avatarUrl" class="avatar" />
+        <div class="meta">
+          <strong>{{ msg.sender }}</strong>
+          <span class="time">{{ msg.timestamp | date:'shortTime' }}</span>
+        </div>
+        <div *ngIf="msg.replyTo" class="reply-to">
+          Replying to: {{ msg.replyTo.sender }} - {{ msg.replyTo.text }}
+        </div>
+        <div class="text">{{ msg.text }}</div>
+        <div *ngIf="msg.attachments">
+          <ng-container *ngFor="let att of msg.attachments">
+            <img *ngIf="att.type === 'image'" [src]="att.url" class="attachment-img" />
+            <a *ngIf="att.type === 'file'" [href]="att.url" target="_blank">{{ att.name }}</a>
+          </ng-container>
+        </div>
+        <div class="message-reactions">
+          <span *ngFor="let reaction of msg.reactions" class="reaction" (click)="addReaction(msg, reaction.emoji)">
+            {{ reaction.emoji }} {{ reaction.users.length }}
+          </span>
+          <span *ngFor="let emoji of emojis.slice(0, 3)" class="reaction" (click)="addReaction(msg, emoji)">
+            {{ emoji }}
+          </span>
+        </div>
+        <div class="status">{{ msg.status }}</div>
+        <div style="margin-top: 0.5rem; display: flex; gap: 0.5rem;">
+          <button (click)="setReplyTo(msg)" title="Reply">Reply</button>
+          <button (click)="pinMessage(msg)" *ngIf="!msg.pinned" title="Pin">Pin</button>
+        </div>
+      </div>
+    </ng-container>
+    <div *ngIf="typing" class="typing-indicator">
+      <span>Someone is typing</span>
+      <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+    </div>
+  </div>
+
+  <form (submit)="send()" class="input-form">
+    <input [(ngModel)]="input" name="chatInput" placeholder="Type a message..." (input)="onInput()" />
+    <button type="button" (click)="showEmojiPicker = !showEmojiPicker" title="Emoji">😊</button>
+    <input type="file" (change)="onFileSelected($event)" />
+    <button type="submit">Send</button>
+  </form>
+  <div *ngIf="showEmojiPicker" class="emoji-picker">
+    <span *ngFor="let emoji of emojis" (click)="addEmoji(emoji)" class="emoji">{{ emoji }}</span>
+  </div>
+  <div *ngIf="selectedFile && previewUrl" class="preview">
+    <img *ngIf="selectedFile.type.startsWith('image')" [src]="previewUrl" class="attachment-img" />
+    <span *ngIf="!selectedFile.type.startsWith('image')">{{ selectedFile.name }}</span>
+    <button type="button" (click)="selectedFile = null; previewUrl = null">Remove</button>
+  </div>
+  <div *ngIf="replyToMessage" class="reply-to" style="margin: 0.5rem 0;">
+    Replying to: {{ replyToMessage.sender }} - {{ replyToMessage.text }}
+    <button type="button" (click)="clearReplyTo()">Cancel</button>
+  </div>
+</div>

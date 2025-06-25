@@ -36,6 +36,7 @@ This project is an end-to-end implementation of a reusable, configurable **Advan
 | `file-upload-zone`    | 🚧 Coming Soon | Drag-and-drop file upload with preview              |
 | `notification-system` | ✅ In Progress | Toast/snackbar system with global injection         |
 | `editable-grid`       | 🚧 Coming Soon | Grid/table with inline editing                      |
+| `chat-component`      | ✅ In Progress | A chat UI with message input, bubbles, timestamps   |
 | `filter-builder`      | 🚧 Coming Soon | Visual query builder for dynamic filtering          |
 
 ```tree
@@ -50,8 +51,9 @@ angular-advanced-ui/
 │   ├── smart-search-bar/        # 🚧 Coming Soon
 │   ├── infinite-scroll/         # 🚧 Coming Soon
 │   ├── file-upload-zone/        # 🚧 Coming Soon
-│   ├── notification-system/     # 🚧 Coming Soon
+│   ├── notification-system/     # ✅ In Progress
 │   ├── editable-grid/           # 🚧 Coming Soon
+│   ├── chat-component/          # ✅ In Progress
 │   └── filter-builder/          # 🚧 Coming Soon
 ├── backend/
 │   ├── controllers/
