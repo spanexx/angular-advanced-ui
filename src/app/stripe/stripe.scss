@@ -1,0 +1,10 @@
+.stripe-checkout-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+
+  button {
+    min-width: 200px;
+    font-weight: bold;
+  }
+}

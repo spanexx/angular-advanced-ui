@@ -1,0 +1,5 @@
+<div class="stripe-checkout-wrapper">
+  <button mat-raised-button color="primary" (click)="checkout()" [disabled]="loading">
+    {{ loading ? 'Processing...' : 'Pay with Stripe' }}
+  </button>
+</div>

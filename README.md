@@ -32,7 +32,7 @@ This project is an end-to-end implementation of a reusable, configurable **Advan
 | `stepper-wizard`      | ✅ In Progress |  UI wizard with validation                          |
 | `modal-service`       | 🚧 Coming Soon | Centralized modal service with injectable config    |
 | `smart-search-bar`    | 🚧 Coming Soon | Intelligent search input with debounce/autocomplete |
-| `infinite-scroll`     | 🚧 Coming Soon | Lazy-loaded infinite scroll directive/component     |
+| `infinite-scroll`     | ✅ In Progress | Lazy-loaded infinite scroll directive/component     |
 | `file-upload-zone`    | 🚧 Coming Soon | Drag-and-drop file upload with preview              |
 | `notification-system` | ✅ In Progress | Toast/snackbar system with global injection         |
 | `editable-grid`       | 🚧 Coming Soon | Grid/table with inline editing                      |

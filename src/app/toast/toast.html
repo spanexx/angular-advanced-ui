@@ -7,7 +7,7 @@
     tabindex="0"
     role="alert"
     [attr.aria-label]="toast.type + ' notification: ' + toast.message"
-  >the 
+  >
     <span *ngIf="toast.icon" class="toast-icon" [innerHTML]="safeIcons[toast.id]"></span>
     <span class="message">{{ toast.message }}</span>
     <div *ngIf="toast.progressBar" class="progress-bar"></div>

@@ -1,0 +1,11 @@
+<div class="infinite-scroll-container">
+  <div *ngFor="let item of data" class="infinite-scroll-item">
+    {{ item | json }}
+  </div>
+  <div *ngIf="loading" class="loading-indicator">
+    Loading more items...
+  </div>
+  <div *ngIf="!hasMore && data.length > 0" class="no-more-items">
+    No more items to load.
+  </div>
+</div>
